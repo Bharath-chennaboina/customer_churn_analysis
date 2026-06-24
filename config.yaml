@@ -1,0 +1,62 @@
+data:
+  raw_path: "data/raw/telco_churn.csv"
+  processed_path: "data/processed/telco_churn_processed.csv"
+  download_url: "https://raw.githubusercontent.com/IBM/telco-customer-churn-on-icp4d/master/data/Telco-Customer-Churn.csv"
+  target_column: "Churn"
+  customer_id_col: "customerID"
+
+features:
+  categorical_cols:
+    - gender
+    - SeniorCitizen
+    - Partner
+    - Dependents
+    - PhoneService
+    - MultipleLines
+    - InternetService
+    - OnlineSecurity
+    - OnlineBackup
+    - DeviceProtection
+    - TechSupport
+    - StreamingTV
+    - StreamingMovies
+    - Contract
+    - PaperlessBilling
+    - PaymentMethod
+  numerical_cols:
+    - tenure
+    - MonthlyCharges
+    - TotalCharges
+  drop_cols:
+    - customerID
+
+model:
+  test_size: 0.2
+  random_state: 42
+  cv_folds: 5
+  model_path: "models/churn_model.pkl"
+  best_model: "lightgbm"
+
+  lightgbm_params:
+    n_estimators: 300
+    learning_rate: 0.05
+    max_depth: 6
+    num_leaves: 40
+    min_child_samples: 20
+    subsample: 0.8
+    colsample_bytree: 0.8
+    class_weight: "balanced"
+
+  xgboost_params:
+    n_estimators: 300
+    learning_rate: 0.05
+    max_depth: 6
+    subsample: 0.8
+    colsample_bytree: 0.8
+    scale_pos_weight: 3
+
+retention:
+  high_risk_threshold: 0.70
+  medium_risk_threshold: 0.40
+  clv_monthly_margin: 0.30   # 30% margin assumption
+  clv_discount_rate: 0.10    # Annual discount rate
